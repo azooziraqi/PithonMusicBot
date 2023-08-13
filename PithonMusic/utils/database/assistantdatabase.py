@@ -105,3 +105,34 @@ async def group_assistant(self, chat_id: int) -> int:
         return self.four
     elif int(assis) == 5:
         return self.five
+    
+async def channel_assistant(self, chat_id: int) -> int:
+    from PithonMusic.core.userbot import assistants
+
+    assistant = assistantdict.get(chat_id)
+    if not assistant:
+        dbassistant = await db.find_one({"chat_id": chat_id})
+        if not dbassistant:
+            assis = await set_calls_assistant(chat_id)
+        else:
+            assis = dbassistant["assistant"]
+            if assis in assistants:
+                assistantdict[chat_id] = assis
+                assis = assis
+            else:
+                assis = await set_calls_assistant(chat_id)
+    else:
+        if assistant in assistants:
+            assis = assistant
+        else:
+            assis = await set_calls_assistant(chat_id)
+    if int(assis) == 1:
+        return self.one
+    elif int(assis) == 2:
+        return self.two
+    elif int(assis) == 3:
+        return self.three
+    elif int(assis) == 4:
+        return self.four
+    elif int(assis) == 5:
+        return self.five
